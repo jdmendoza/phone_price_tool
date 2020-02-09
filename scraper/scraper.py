@@ -59,13 +59,19 @@ class ScrapeURL():
         date_data = [x.text for x in recently_sold[0].findAll("span") if 'Sold' in x.text]
         listing_url = [x['href'] for x in all_links if '/listing/view/' in x['href']][-5:]
 
+        print (len(price_data),len(condition_data),len(storage_data),len(color_data),len(date_data),len(listing_url))
+
         self.df = pd.DataFrame({'price':price_data,'storage':storage_data,'condition':condition_data,'color':color_data,'date':date_data, 'listing_url':listing_url})
         self.df['url'] = self.url
 
     def run(self):
-        self.pull_data()
-        self.process_df()
-        return self.df
+        try:
+            self.pull_data()
+            self.process_df()
+            return self.df
+        except:
+            print('Issue with {}'.format(self.url))
+
 
 def main():
     urls = build_urls()
@@ -80,9 +86,9 @@ def main():
 
 if __name__ == '__main__':
     while True:
-    now = datetime.datetime.now()
-    current_time = now.strftime("%H:%M:%S")
-    print("Start, {}".format(current_time))
-    main()
-    print("Stop, {}".format(current_time))
-    time.sleep(10800)
+        now = datetime.datetime.now()
+        current_time = now.strftime("%H:%M:%S")
+        print("Start, {}".format(current_time))
+        main()
+        print("Stop, {}".format(current_time))
+        time.sleep(10800)
