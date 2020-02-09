@@ -4,7 +4,7 @@ import pandas as pd
 import re
 import datetime
 import dateparser
-
+import time
 
 def build_urls():
     """
