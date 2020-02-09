@@ -79,4 +79,10 @@ def main():
 
 
 if __name__ == '__main__':
+    while True:
+    now = datetime.datetime.now()
+    current_time = now.strftime("%H:%M:%S")
+    print("Start, {}".format(current_time))
     main()
+    print("Stop, {}".format(current_time))
+    time.sleep(10800)
