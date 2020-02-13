@@ -39,6 +39,6 @@ model_path = 'model_saves/'
 
 pickle.dump(enc, open(model_path + 'one_hot_encoder.plk', 'wb'))
 pickle.dump(model, open(model_path + 'model.plk', 'wb'))
-pickle.dump(features_scaler, open(model_path + 'feature_scaler.plk', 'wb'))
+pickle.dump(features_scaler, open(model_path + 'features_scaler.plk', 'wb'))
 pickle.dump(target_scaler, open(model_path + 'target_scaler.plk', 'wb'))
 
