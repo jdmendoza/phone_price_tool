@@ -1,5 +1,6 @@
 import pickle
 import pandas as pd
+import numpy as np
 import json
 
 pickle_path = '' #add path
@@ -21,13 +22,15 @@ def lambda_handler(event, context):
             event = {}
 
     if "model" in event:
-        new_phone = { "model": event["model"], "condition": event["condition"],
-        "storage": event["storage"], "carrier": event["carrier"] }
+        new_phone = {"model": event["model"], "condition": event["condition"],
+                     "storage": event["storage"], "carrier": event["carrier"]}
 
-        #Apply encoding and scaling
+        x_encoded = enc.transform(np.array([new_phone['color'], new_phone['condition'],
+                                            new_phone['carrier'], new_phone['model']]).reshape(1, -1))
 
-        new_x = pd.DataFrame.from_dict(new_phone, orient="index").transpose()
-        prediction = str(model.predict(new_phone)) #Apply inverse scaling
+        x_scaled = np.concatenate([x_encoded.toarray(), np.array(new_phone['storage']).reshape(1, 1)], axis=1)
+
+        prediction = str(target_scaler.inverse_transform(model.predict(x_scaled)))
 
         return {"body": prediction}
 

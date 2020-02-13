@@ -16,7 +16,7 @@ categorical_features = ['color', 'condition', 'carrier', 'model']
 enc.fit(data[categorical_features])
 X = enc.transform(data[categorical_features]).toarray()
 
-y = data.price.values.reshape(1, -1)
+y = data.price.values.reshape(-1, 1)
 X = np.concatenate([X, data.storage.values.reshape(-1, 1)], axis=1)
 
 features_scaler = MinMaxScaler(feature_range=(0, 1))
@@ -25,10 +25,10 @@ target_scaler = MinMaxScaler(feature_range=(0, 1))
 X_scaled = features_scaler.fit_transform(X)
 y_scaled = target_scaler.fit_transform(y)
 
-X_train, X_test, y_train, y_test = train_test_split(X_scaled, y_scaled.T, test_size=0.2, random_state=32)
+X_train, X_test, y_train, y_test = train_test_split(X_scaled, y_scaled, test_size=0.2, random_state=32)
 
 model = LinearRegression()
-model.fit(X_scaled, y_scaled.T)
+model.fit(X_scaled, y_scaled)
 y_pred = model.predict(X_test)
 
 #wandb.sklearn.plot_regressor(model, X_train, X_test, y_train.reshape(-1,1), y_test.reshape(-1,1), 'LinearRegression')
