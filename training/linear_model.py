@@ -11,7 +11,7 @@ import pickle
 data = pd.read_csv('/Users/jdmendoza/Desktop/phone_price_tool/training/dataset/a7bad4b1-20c1-4049-88c0-a9db77bb56e4.csv')
 data = data.dropna().drop_duplicates().reset_index(drop=True)
 
-enc = OneHotEncoder()
+enc = OneHotEncoder(drop='first')
 categorical_features = ['color', 'condition', 'carrier', 'model']
 enc.fit(data[categorical_features])
 X = enc.transform(data[categorical_features]).toarray()
@@ -31,10 +31,11 @@ model = LinearRegression()
 model.fit(X_scaled, y_scaled)
 y_pred = model.predict(X_test)
 
-print(y_pred)
+print(target_scaler.inverse_transform(y_pred))
 
 #wandb.sklearn.plot_regressor(model, X_train, X_test, y_train.reshape(-1,1), y_test.reshape(-1,1), 'LinearRegression')
 
+print(model.coef_)
 print("R^2 " + str(model.score(X_test, y_test)))
 
 model_path = 'training/model_saves/'
