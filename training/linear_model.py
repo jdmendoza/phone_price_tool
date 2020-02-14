@@ -31,14 +31,16 @@ model = LinearRegression()
 model.fit(X_scaled, y_scaled)
 y_pred = model.predict(X_test)
 
+print(y_pred)
+
 #wandb.sklearn.plot_regressor(model, X_train, X_test, y_train.reshape(-1,1), y_test.reshape(-1,1), 'LinearRegression')
 
 print("R^2 " + str(model.score(X_test, y_test)))
 
-model_path = 'model_saves/'
+model_path = 'training/model_saves/'
 
-pickle.dump(enc, open(model_path + 'one_hot_encoder.plk', 'wb'))
-pickle.dump(model, open(model_path + 'model.plk', 'wb'))
-pickle.dump(features_scaler, open(model_path + 'features_scaler.plk', 'wb'))
-pickle.dump(target_scaler, open(model_path + 'target_scaler.plk', 'wb'))
+pickle.dump(enc, open(model_path + 'one_hot_encoder.pkl', 'wb'))
+pickle.dump(model, open(model_path + 'model.pkl', 'wb'))
+pickle.dump(features_scaler, open(model_path + 'features_scaler.pkl', 'wb'))
+pickle.dump(target_scaler, open(model_path + 'target_scaler.pkl', 'wb'))
 
