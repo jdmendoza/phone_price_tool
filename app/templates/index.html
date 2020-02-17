@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+{% extends "bootstrap/base.html" %}
+
+{% block title %} Phone Pricing Tool{% endblock %}
+
+{% block content %}
+
+<div class="container">
+    <h1>What Is My Phone Worth?</h1>
+    <br>
+
+<div class="form-group">
+<form method=post enctype=multipart/form-data>
+    <label for="model">Enter Model:</label>
+    <input type="text" class="form-control" id="model" name="model" placeholder="?">
+    <br>
+    <label for="condition">Enter Condition:</label>
+    <input type="text" class="form-control" id="condition" name="condition" placeholder="?">
+    <br>
+    <label for="color">Enter Color:</label>
+    <input type="text" class="form-control" id="color" name="color" placeholder="?">
+    <br>
+    <label for="storage">Enter Storage:</label>
+    <input type="text" class="form-control" id="storage" name="storage" placeholder="?">
+    <br>
+    <label for="carrier">Enter Carrier:</label>
+    <input type="text" class="form-control" id="carrier" name="carrier" placeholder="?">
+    <br>
+    <button type="submit" id="submit" class="btn btn-success">Submit</button>
+
+</form>
+</div>
+</div>
+
+{% if price %}
+    <div class="container">
+
+    <h2>Price </h2>
+    <div class="alert alert-success" role="alert">
+        Success!
+    </div>
+    <blockquote>
+        <code>This Phone Is Worth ${{price}} </code>
+    </blockquote>
+
+    </div>
+{% endif %}
+
+{% if error %}
+    <div class="container">
+
+    <h2>Error </h2>
+    <div class="alert alert-danger" role="alert">
+        Please Make Sure Inputs Are Correct!
+    </div>
+
+</div>
+{% endif %}
+
+{% endblock %}
