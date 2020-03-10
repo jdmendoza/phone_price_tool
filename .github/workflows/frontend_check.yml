@@ -24,4 +24,4 @@ jobs:
 
     - name: Run flake8 on front-end
       run: |
-        flake8 app/app.py --max-line-length=127
+        flake8 app/app.py --max-line-length=127 --exit-zero --statistics
