@@ -15,7 +15,7 @@ jobs:
     - name: Setup Python 3.6
       uses: actions/setup-python@v1
       with:
-        python-version: 3.6.5
+        python-version: 3.6
       
     - name: Install Dependancies
       run: |
