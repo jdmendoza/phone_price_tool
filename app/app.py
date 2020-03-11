@@ -4,12 +4,15 @@ from flask_wtf import FlaskForm
 from wtforms import (StringField, SubmitField)
 from flask_bootstrap import Bootstrap
 
+import dash
+import dash_html_components as html
+
 API_URL = "https://uoa1yghdj0.execute-api.us-east-2.amazonaws.com/default/price_predict"
 
-app = Flask(__name__)
-app.config['SECRET_KEY'] = 'supersecret'
+server = Flask(__name__)
+server.config['SECRET_KEY'] = 'supersecret'
 
-Bootstrap(app)
+Bootstrap(server)
 
 
 class InfoForm(FlaskForm):
@@ -23,7 +26,7 @@ class InfoForm(FlaskForm):
     submit = SubmitField(" ")
 
 
-@app.route('/', methods=['GET', 'POST'])
+@server.route('/', methods=['GET', 'POST'])
 def index():
     form = InfoForm()
     price = None
@@ -50,5 +53,14 @@ def index():
     return render_template('index.html', form=form, price=price, error=error)
 
 
+app = dash.Dash(
+    __name__,
+    server=server,
+    routes_pathname_prefix='/admin/'
+)
+
+app.layout = html.Div("My Dash app")
+
+
 if __name__ == "__main__":
-    app.run()
+    app.run_server(debug=True)

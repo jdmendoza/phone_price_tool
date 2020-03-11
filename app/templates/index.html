@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 {% extends "bootstrap/base.html" %}
 
-{% block title %} Phone Pricing Tool{% endblock %}
+{% block title %} Phone Pricing Tool {% endblock %}
 
 {% block content %}
 
@@ -11,20 +11,66 @@
 
 <div class="form-group">
 <form method=post enctype=multipart/form-data>
-    <label for="model">Enter Model:</label>
-    <input type="text" class="form-control" id="model" name="model" placeholder="?">
+
+    <label for="model">Select A Model:</label>
+    <select class="form-control" id="model" name="model">
+        <option>apple-iphone-6s</option>
+        <option>apple-iphone-6s-plus</option>
+        <option>apple-iphone-7</option>
+        <option>apple-iphone-7-plus</option>
+        <option>apple-iphone-8</option>
+        <option>apple-iphone-8-plus</option>
+        <option>apple-iphone-x</option>
+        <option>apple-iphone-xr</option>
+        <option>apple-iphone-xs</option>
+        <option>apple-iphone-xs-max</option>
+        <option>apple-iphone-11</option>
+    </select>
     <br>
-    <label for="condition">Enter Condition:</label>
-    <input type="text" class="form-control" id="condition" name="condition" placeholder="?">
+    <label for="condition">Select A Condition:</label>
+    <select class="form-control" id="condition" name="condition">
+        <option>Fair</option>
+        <option>Good</option>
+        <option>Mint</option>
+        <option>New</option>
+    </select>
     <br>
-    <label for="color">Enter Color:</label>
-    <input type="text" class="form-control" id="color" name="color" placeholder="?">
+    <label for="color">Select A Color:</label>
+    <select class="form-control" id="color" name="color">
+        <option>Black</option>
+        <option>Blue</option>
+        <option>Coral</option>
+        <option>Gold</option>
+        <option>Gray</option>
+        <option>Green</option>
+        <option>Grey</option>
+        <option>Jet Black</option>
+        <option>Purple</option>
+        <option>Red</option>
+        <option>Rose Gold</option>
+        <option>Silver</option>
+        <option>White</option>
+        <option>Yellow</option>
+    </select>
     <br>
-    <label for="storage">Enter Storage:</label>
-    <input type="text" class="form-control" id="storage" name="storage" placeholder="?">
+    <label for="storage">Select A Storage:</label>
+    <select class="form-control" id="storage" name="storage">
+        <option>16</option>
+        <option>32</option>
+        <option>64</option>
+        <option>128</option>
+        <option>256</option>
+        <option>512</option>
+    </select>
     <br>
-    <label for="carrier">Enter Carrier:</label>
-    <input type="text" class="form-control" id="carrier" name="carrier" placeholder="?">
+    <label for="carrier">Select A Carrier:</label>
+    <select class="form-control" id="carrier" name="carrier">
+        <option>unlocked</option>
+        <option>verizon</option>
+        <option>att</option>
+        <option>t-mobile</option>
+        <option>sprint</option>
+    </select>
     <br>
     <button type="submit" id="submit" class="btn btn-success">Submit</button>
 
@@ -35,19 +81,19 @@
 {% if price %}
     <div class="container">
 
-    <h2>Price </h2>
+    <h2>Price</h2>
     <div class="alert alert-success" role="alert">
         Success!
     </div>
     <blockquote>
-        <code>This Phone Is Worth ${{price}} </code>
+        This Phone Is Worth <b>${{price}}</b>
     </blockquote>
 
     </div>
 {% endif %}
 
 {% if error %}
-    <div class="container">
+    <div class="container">s
 
     <h2>Error </h2>
     <div class="alert alert-danger" role="alert">
