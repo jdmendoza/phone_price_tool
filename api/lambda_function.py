@@ -42,6 +42,3 @@ def lambda_handler(event, context):
         return {"body": str(round(prediction[0][0], 2))}
 
     return {"body": "No parameters"}
-
-
-
