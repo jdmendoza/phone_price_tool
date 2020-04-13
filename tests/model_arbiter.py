@@ -6,11 +6,7 @@ import boto3
 import datetime
 import sys
 
-import pathlib
-path = str(pathlib.Path().absolute().parent)
-sys.path.insert(0, path)
-
-from training.utils import default_settings, athena_to_s3, pull_data, preprocess_dataset, process_data
+from training.utils import default_settings, athena_to_s3, pull_data, preprocess_dataset
 from training.linear_model import retrain_model
 
 
