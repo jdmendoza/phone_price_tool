@@ -1,12 +1,17 @@
 <!DOCTYPE html>
 {% extends "bootstrap/base.html" %}
 
+{% block navbar %}
+{{nav.mynavbar.render()}}
+{% endblock %}
+
 {% block title %} Phone Pricing Tool {% endblock %}
 
 {% block content %}
 
 <div class="container">
-    <h1>What Is My Phone Worth?</h1>
+    <h3>Selling Your Phone Shouldn't Be Hard</h3>
+    <p>Plug in your iPhone details to determine the price</p>
     <br>
 
 <div class="form-group">
@@ -87,13 +92,14 @@
     </div>
     <blockquote>
         This Phone Is Worth <b>${{price}}</b>
+        <a href="{{url}}">Click Here</a> for Swappa Phone Marketplace
     </blockquote>
 
     </div>
 {% endif %}
 
 {% if error %}
-    <div class="container">s
+    <div class="container">
 
     <h2>Error </h2>
     <div class="alert alert-danger" role="alert">

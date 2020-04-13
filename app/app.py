@@ -7,12 +7,26 @@ from flask_bootstrap import Bootstrap
 import dash
 import dash_html_components as html
 
+from flask_nav import Nav
+from flask_nav.elements import Navbar, View
+
+
 API_URL = "https://uoa1yghdj0.execute-api.us-east-2.amazonaws.com/default/price_predict"
+SWAPPA_URL = "https://swappa.com/mobile/buy/"
 
 server = Flask(__name__)
 server.config['SECRET_KEY'] = 'supersecret'
 
 Bootstrap(server)
+nav = Nav()
+
+
+@nav.navigation()
+def mynavbar():
+    return Navbar(
+        'Phone Price Tool',
+        View('Home', 'index'),
+    )
 
 
 class InfoForm(FlaskForm):
@@ -31,6 +45,7 @@ def index():
     form = InfoForm()
     price = None
     error = None
+    url = None
 
     if request.method == 'POST':
         phone = dict()
@@ -46,11 +61,12 @@ def index():
             error = None
             result = requests.post(API_URL, json=phone)
             price = result.text
+            url = SWAPPA_URL + phone['model'] + '/' + phone['carrier']
 
         else:
             error = True
 
-    return render_template('index.html', form=form, price=price, error=error)
+    return render_template('index.html', form=form, price=price, error=error, url=url)
 
 
 app = dash.Dash(
@@ -60,6 +76,7 @@ app = dash.Dash(
 )
 
 app.layout = html.Div("My Dash app")
+nav.init_app(server)
 
 
 if __name__ == "__main__":

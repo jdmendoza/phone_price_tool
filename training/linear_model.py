@@ -13,9 +13,8 @@ import pathlib
 path = str(pathlib.Path().absolute().parent)
 sys.path.insert(0, path)
 
-from training.utils import default_settings, athena_to_s3, pull_data, preprocess_dataset
 
-MODEL_PATH = 'training/model_saves/'
+from training.utils import default_settings, athena_to_s3, pull_data, preprocess_dataset, save_to_s3
 
 
 def process_data(data):
@@ -34,11 +33,26 @@ def process_data(data):
     x_scaled = features_scaler.fit_transform(x_prescaled)
     y_scaled = target_scaler.fit_transform(y_prescaled)
 
-    #pickle.dump(enc, open(MODEL_PATH + 'one_hot_encoder.pkl', 'wb'))
-    #pickle.dump(features_scaler, open(MODEL_PATH + 'features_scaler.pkl', 'wb'))
-    #pickle.dump(target_scaler, open(MODEL_PATH + 'target_scaler.pkl', 'wb'))
+    pickle.dump(enc, open('one_hot_encoder.pkl', 'wb'))
+    pickle.dump(features_scaler, open('features_scaler.pkl', 'wb'))
+    pickle.dump(target_scaler, open('target_scaler.pkl', 'wb'))
+
+    save_to_s3(client, params, 'one_hot_encoder.pkl')
+    save_to_s3(client, params, 'features_scaler.pkl')
+    save_to_s3(client, params, 'target_scaler.pkl')
 
     return x_scaled, y_scaled
+
+
+def retrain_model(X, y):
+
+    model_to_upload = LinearRegression()
+    model_to_upload.fit(X, y)
+
+    pickle.dump(model_to_upload, open('model.pkl', 'wb'))
+    save_to_s3(client, params, 'model.pkl')
+
+    return
 
 
 if __name__ == '__main__':
@@ -59,6 +73,7 @@ if __name__ == '__main__':
     y_train_pred = model.predict(X_train)
     y_pred = model.predict(X_test)
 
-    #pickle.dump(model, open(MODEL_PATH + 'model.pkl', 'wb'))
+    pickle.dump(model, open('model.pkl', 'wb'))
+    save_to_s3(client, params, 'model.pkl')
 
     wandb.log({"Train MSE": mean_squared_error(y_train, y_train_pred), "Test MSE": mean_squared_error(y_test, y_pred)})
