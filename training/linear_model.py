@@ -9,11 +9,6 @@ import wandb
 import sys
 import logging
 
-import pathlib
-path = str(pathlib.Path().absolute().parent)
-sys.path.insert(0, path)
-
-
 from training.utils import default_settings, athena_to_s3, pull_data, preprocess_dataset, save_to_s3
 
 
