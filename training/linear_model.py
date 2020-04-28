@@ -1,18 +1,24 @@
-import pandas as pd
 import numpy as np
+import boto3
 from sklearn.preprocessing import MinMaxScaler, OneHotEncoder
 from sklearn.linear_model import LinearRegression
 from sklearn.model_selection import train_test_split
 from sklearn.metrics import mean_squared_error
 import pickle
 import wandb
-import sys
 import logging
 
 from training.utils import default_settings, athena_to_s3, pull_data, preprocess_dataset, save_to_s3
 
+client, session, params = default_settings()
+s3 = boto3.resource('s3')
 
-def process_data(data):
+
+def get_pkl(fname):
+    return pickle.loads(s3.Bucket("phone-pricing-models").Object(fname).get()['Body'].read())
+
+
+def process_data(data, dry_run=True):
 
     enc = OneHotEncoder(drop='first')
     categorical_features = ['color', 'condition', 'carrier', 'model']
@@ -28,18 +34,20 @@ def process_data(data):
     x_scaled = features_scaler.fit_transform(x_prescaled)
     y_scaled = target_scaler.fit_transform(y_prescaled)
 
-    pickle.dump(enc, open('one_hot_encoder.pkl', 'wb'))
-    pickle.dump(features_scaler, open('features_scaler.pkl', 'wb'))
-    pickle.dump(target_scaler, open('target_scaler.pkl', 'wb'))
+    if not dry_run:
+        pickle.dump(enc, open('one_hot_encoder.pkl', 'wb'))
+        pickle.dump(features_scaler, open('features_scaler.pkl', 'wb'))
+        pickle.dump(target_scaler, open('target_scaler.pkl', 'wb'))
 
-    save_to_s3(client, params, 'one_hot_encoder.pkl')
-    save_to_s3(client, params, 'features_scaler.pkl')
-    save_to_s3(client, params, 'target_scaler.pkl')
+        save_to_s3(client, params, 'one_hot_encoder.pkl')
+        save_to_s3(client, params, 'features_scaler.pkl')
+        save_to_s3(client, params, 'target_scaler.pkl')
 
     return x_scaled, y_scaled
 
 
-def retrain_model(X, y):
+def retrain_model(data):
+    X, y = process_data(data, dry_run=False)
 
     model_to_upload = LinearRegression()
     model_to_upload.fit(X, y)
@@ -54,12 +62,11 @@ if __name__ == '__main__':
 
     wandb.init(project="phone_price")
 
-    client, session, params = default_settings()
     s3_filename = athena_to_s3(session, params)
     df_all = pull_data(client, params, s3_filename)
     data = preprocess_dataset(df_all)
 
-    X, y = process_data(data)
+    X, y = process_data(data, dry_run=False)
     X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=32)
 
     model = LinearRegression()

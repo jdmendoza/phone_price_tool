@@ -19,17 +19,17 @@
 
     <label for="model">Select A Model:</label>
     <select class="form-control" id="model" name="model">
-        <option>apple-iphone-6s</option>
-        <option>apple-iphone-6s-plus</option>
-        <option>apple-iphone-7</option>
-        <option>apple-iphone-7-plus</option>
-        <option>apple-iphone-8</option>
-        <option>apple-iphone-8-plus</option>
-        <option>apple-iphone-x</option>
-        <option>apple-iphone-xr</option>
-        <option>apple-iphone-xs</option>
-        <option>apple-iphone-xs-max</option>
-        <option>apple-iphone-11</option>
+        <option>iPhone 6s</option>
+        <option>iPhone 6s Plus</option>
+        <option>iPhone 7</option>
+        <option>iPhone 8</option>
+        <option>iPhone 8 Plus</option>
+        <option>iPhone X</option>
+        <option>iPhone XR</option>
+        <option>iPhone XS</option>
+        <option>iPhone XS Max</option>
+        <option>iPhone 11</option>
+
     </select>
     <br>
     <label for="condition">Select A Condition:</label>
@@ -85,13 +85,13 @@
 
 {% if price %}
     <div class="container">
-
-    <h2>Price</h2>
-    <div class="alert alert-success" role="alert">
-        Success!
-    </div>
+        <div class="alert alert-success" role="alert">
+            Success!
+        </div>
     <blockquote>
-        This Phone Is Worth <b>${{price}}</b>
+        Phone details: {{phone_details}} <br>
+        Estimated price is <b>${{price}}</b>
+        <br>
         <a href="{{url}}">Click Here</a> for Swappa Phone Marketplace
     </blockquote>
 
