@@ -37,7 +37,7 @@ def lambda_handler(event, context):
 
         x_scaled = features_scaler.transform(x_concat)
 
-        prediction = target_scaler.inverse_transform(model.predict(x_scaled))
+        prediction = target_scaler.inverse_transform(model.predict(x_scaled).reshape(1, 1))
 
         return {"body": str(round(prediction[0][0], 2))}
 
