@@ -1,8 +1,8 @@
 import numpy as np
 import boto3
 from sklearn.preprocessing import MinMaxScaler, OneHotEncoder
-from sklearn.linear_model import LinearRegression
-from sklearn.model_selection import train_test_split
+from sklearn.linear_model import LinearRegression, Lasso
+from sklearn.model_selection import train_test_split, GridSearchCV
 from sklearn.metrics import mean_squared_error
 import pickle
 import wandb
@@ -49,13 +49,18 @@ def process_data(data, dry_run=True):
 def retrain_model(data):
     X, y = process_data(data, dry_run=False)
 
-    model_to_upload = LinearRegression()
+    model_init = Lasso()
+    params_ = {'alpha': [1, 0.5, 0.1, 0.05, 0.01, 0.005, 0.001, 0.005, 0.0001, 0]}
+    clf = GridSearchCV(model_init, params_, 'neg_mean_squared_error')
+    clf.fit(X, y)
+
+    model_to_upload = Lasso(alpha=clf.best_params_['alpha'])
     model_to_upload.fit(X, y)
 
     pickle.dump(model_to_upload, open('model.pkl', 'wb'))
     save_to_s3(client, params, 'model.pkl')
 
-    return
+    return clf.best_params_['alpha']
 
 
 if __name__ == '__main__':
@@ -69,7 +74,12 @@ if __name__ == '__main__':
     X, y = process_data(data, dry_run=False)
     X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=32)
 
-    model = LinearRegression()
+    model_init = Lasso()
+    params_ = {'alpha': [1, 0.5, 0.1, 0.05, 0.01, 0.005, 0.001, 0.005, 0.0001, 0]}
+    clf = GridSearchCV(model_init, params_, 'neg_mean_squared_error')
+    clf.fit(X_train, y_train)
+
+    model = Lasso(alpha=clf.best_params_['alpha'])
     model.fit(X, y)
 
     y_train_pred = model.predict(X_train)

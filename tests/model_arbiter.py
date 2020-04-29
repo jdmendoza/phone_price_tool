@@ -1,16 +1,14 @@
-import pandas as pd
 import numpy as np
 import pickle
 from sklearn.metrics import mean_squared_error
 import boto3
 import datetime
 from decimal import Decimal
-import sys
 import logging
 logging.basicConfig(level=logging.INFO)
 
-from training.utils import default_settings, athena_to_s3, pull_data, preprocess_dataset
-from training.linear_model import process_data, retrain_model
+from training.utils import default_settings, athena_to_s3, pull_data
+from training.linear_model import retrain_model
 
 
 def get_pkl(fname):
@@ -23,17 +21,18 @@ class ModelTester:
         logging.info('Initializing ModelTester')
 
         self.model_under_test = get_pkl('model.pkl')
-        print(self.model_under_test.coef_, self.model_under_test.intercept_)
+        self.hyperparameter = None
         self.lookback_days = lookback_days
 
         # Pull most recent samples
         self.raw_data = None
         self.get_test_data()
 
-        # Get data model ready
+        # Get data ready for the model
         self.input_data = None
         self.y_true = None
         self.transform_data()
+
         self.y_pred = self.model_under_test.predict(self.input_data)
 
         # Metrics to compare and save
@@ -66,28 +65,28 @@ class ModelTester:
     def calculate_metrics(self):
         self.mse = mean_squared_error(self.y_true, self.y_pred)
 
-    def save_metrics(self, metric, value):
+    def save_metrics(self, name, metric, value):
         logging.info('Saving to DynamoDB')
-        store_data_in_table(table=self.metrics_table, name='model_metrics', metric=metric, value=value)
+        store_data_in_table(table=self.metrics_table, name=name, metric=metric, value=value)
 
     def get_prev_metrics(self):
-        # pull the most recent mse, currently hardcoded for mse
         response = self.metrics_table.scan()
-        self.prev_mse = sorted([(x['id'], x['metric'], x['value']) for x in response['Items']])[-1][-1]
+        mse_values = filter(lambda x: x['name'] == 'model_metrics', response['Items'])
+        self.prev_mse = sorted([(x['id'], x['metric'], x['value']) for x in mse_values])[-1][-1]
         logging.info('previous_mse = {}'.format(self.prev_mse))
 
     def run(self):
         self.get_prev_metrics()
         self.calculate_metrics()
 
-        check_mse = True  # self.mse < self.prev_mse
+        check_mse = self.mse < self.prev_mse
         logging.info('CheckMSE =  {}, old mse is {}, and current mse is {}'.format(check_mse, self.prev_mse, self.mse))
 
-        if all([check_mse]):
+        if True: # all([check_mse]):
             logging.info('Retraining model')
-            retrain_model(self.raw_data)
-            self.save_metrics('mse', self.mse)
-            # compare with new retrained model
+            self.hyperparameter = retrain_model(self.raw_data)
+            self.save_metrics('model_metrics', 'mse', self.mse)
+            self.save_metrics('hyperparameters', 'alpha', self.hyperparameter)
 
 
 def store_data_in_table(table, name, metric, value):

@@ -63,7 +63,6 @@ def index():
     price = None
     error = None
     url = None
-    phone = None
     phone_details = None
 
     if request.method == 'POST':
@@ -98,7 +97,8 @@ def mse_vis():
 
     metrics_table = session.resource('dynamodb').Table('model_metrics')
     response = metrics_table.scan()
-    data = [(to_datetime(x['id']), x['metric'], float(x['value'])) for x in response['Items']]
+    mse_values = filter(lambda x: x['name'] == 'model_metrics', response['Items'])
+    data = [(to_datetime(x['id']), x['metric'], float(x['value'])) for x in mse_values]
     df = pd.DataFrame(data, columns=['datetime', 'metric', 'value']).sort_values(by='datetime', ascending=True)
 
     return html.Div([

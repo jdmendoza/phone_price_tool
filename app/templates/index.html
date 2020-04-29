@@ -78,6 +78,8 @@
     </select>
     <br>
     <button type="submit" id="submit" class="btn btn-success">Submit</button>
+    <br><br>
+    <p>*Price shown is an estimate. Check your favorite marketplace for recent sell prices.</p>
 
 </form>
 </div>
@@ -89,10 +91,11 @@
             Success!
         </div>
     <blockquote>
-        Phone details: {{phone_details}} <br>
+        Phone details: <i>{{phone_details}}</i>
+        <br>
         Estimated price is <b>${{price}}</b>
         <br>
-        <a href="{{url}}">Click Here</a> for Swappa Phone Marketplace
+        <a href="{{url}}" target="_blank">Click Here</a> for Swappa Phone Marketplace
     </blockquote>
 
     </div>
