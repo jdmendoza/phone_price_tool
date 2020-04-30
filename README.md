@@ -40,7 +40,7 @@ to select an alpha hyperparameter which is required for Lasso Regression.
 
 The project was built in 2020 by [Danny Mendoza](http://jdmendoza.github.io/).
 
-Special thanks for [Parin Shah](https://github.com/parinpshah94) for brainstorming with me and for code reviews. 
+Special thanks to [Parin Shah](https://github.com/parinpshah94) for brainstorming with me and for code reviews. 
 
 
 Thanks to the open source community for providing such powerful tools.
