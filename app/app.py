@@ -43,6 +43,7 @@ def mynavbar():
         'Phone Price Tool',
         View('Home', 'index'),
         Link('Admin', 'https://phone-price-tool.herokuapp.com/admin'),
+        Link('Code', 'https://github.com/jdmendoza/phone_price_tool')
     )
 
 
