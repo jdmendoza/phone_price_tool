@@ -22,5 +22,6 @@ Model Dashboard: [https://phone-price-tool.herokuapp.com/admin](https://phone-pr
 
 The project was built in 2020 by [Danny Mendoza](http://jdmendoza.github.io/). 
 
+
 Thanks to the open source community for providing such powerful tools.
 
