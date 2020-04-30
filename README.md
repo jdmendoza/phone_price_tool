@@ -7,6 +7,24 @@ Website: [https://phone-price-tool.herokuapp.com](https://phone-price-tool.herok
 Model Dashboard: [https://phone-price-tool.herokuapp.com/admin](https://phone-price-tool.herokuapp.com/admin)
 
 
+## Model Details
+
+This project uses Lasso Regression for scheduled training due to the inherent 
+[Feature Selection](https://jdmendoza.github.io/2019/01/24/feature-selection.html) ability and parameter interpretability.
+This is paired with a [Cross Validated Grid Search](https://scikit-learn.org/stable/modules/generated/sklearn.model_selection.GridSearchCV.html) 
+to select an alpha hyperparameter which is required for Lasso Regression. 
+ 
+ 
+ ## Services Used
+ 
+ * [AWS Lambda](https://aws.amazon.com/lambda/) - Gives serverless function capabilities for model inference end-point
+ * [AWS S3](https://aws.amazon.com/s3) - Cloud storage for object storage (preprocessing object, ML models) and data
+ * [AWS DyamoDB](https://aws.amazon.com/dynamodb/) - NoSQL database for storing performance metrics & hyperparameters 
+ * [AWS EC2](https://aws.amazon.com/ec2/) - Cloud compute to run web-scraper and schedule training scripts
+ * [Heroku](www.heroku.com) - Cloud platform for web app deployment
+ * [Weights & Biases](https://www.wandb.com/) - ML Experiment tracking
+
+
 ## Built With
 
 * [Scikit learn](https://scikit-learn.org/stable/) - Machine Learning package 
